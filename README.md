@@ -1,4 +1,5 @@
-# Mirrord at github and git.uark.edu
+# Mirror for git.uark.edu
+
 # AlwaysOnCall
 
 This is a texting bot app that uses the Twilio API to send out a text message, when someone presses a button asking for help, to all qualified people. First person to respond will be the person that is on campus and is closest to helping.
@@ -29,3 +30,7 @@ Incentives could be like half an hour minimum to be logged to your hour log
 * add `help` if someone texts for list of responses/how to use the texting bot
 * TODO maybe make a webapp interface?
 * integrate this texting bot to the FJLRS
+
+## References
+
+https://www.twilio.com/blog/2016/08/writing-a-bot-for-ip-messaging-in-node-js.html
