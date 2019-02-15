@@ -4,7 +4,7 @@ const methods = {
     run: function(request, response) {
         // Strip the trigger word from the response.
         const message = request.Body.split(' ').slice(1).join(' ')
-        console.log(request);
+        //console.log(request);
 
         // Create a new response object to send to Twilio.
         const twiml = new MessagingResponse()
