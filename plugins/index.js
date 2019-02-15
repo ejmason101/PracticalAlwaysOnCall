@@ -39,8 +39,9 @@ const methods = {
         `Received invalid command ${request.Body} from ${request.From}.`
       );
       twiml.message(
-        `Sorry, that's an invalid command.\nCheck your plugins folder for a list of valid commands.`
+        `I don't understand. For list of commands reply with \`control\``
       );
+
       response.send(twiml.toString());
     }
   }

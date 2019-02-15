@@ -33,4 +33,4 @@ Incentives could be like half an hour minimum to be logged to your hour log
 
 ## References
 
-https://www.twilio.com/blog/2016/08/writing-a-bot-for-ip-messaging-in-node-js.html
+https://www.twilio.com/blog/2018/03/sms-bot-node-texteverything.html

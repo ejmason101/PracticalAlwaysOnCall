@@ -19,15 +19,26 @@ app.use(bodyParser.urlencoded({ extended: false }));
 
 app.post(config.twilio.webhook_path, function(request, response) {
   const twilioSignature = request.header('X-Twilio-Signature');
-  const validTwilioRequest = twilio.validateRequest(
+  validTwilioRequest = twilio.validateRequest(
     config.twilio.authToken,
     twilioSignature,
     config.twilio.webhookUrl,
     request.body
   );
 
+  validTwilioRequest = true;
+
   if (validTwilioRequest) {
     response.set('Content-Type', 'text/xml');
+
+
+    // Add middleware to check if the request is valid
+    console.log("\n~~~ app.js recieved text from phone number ~~~");
+    console.log(request.body.From+ "\n");
+
+    // If the number isnt recognized, 
+
+    
 
     if (!config.twilio.allowedNumbers.includes(request.body.From)) {
       console.log(
