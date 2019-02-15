@@ -1,3 +1,5 @@
+const MessagingResponse = require('twilio').twiml.MessagingResponse
+
 const twilio = require('twilio');
 const express = require('express');
 const bodyParser = require('body-parser');
@@ -65,16 +67,32 @@ app.post(config.twilio.webhook_path, function(request, response) {
     // Add middleware to check if the request is valid
     console.log("\n~~~ app.js recieved text from phone number ~~~");
     console.log(request.body.From+ "\n");
+    console.log(request);
+    let command = request.body.Body.split(' ')[0];
 
     // Search for the matching number
     RegisteredUsers.find( { phoneNumber: request.body.From.toString()})
       .then(results => {
         console.log("\n Results from registered users query");
         console.log(results)
+        if(results.length == 0) {
+          if(command == "register" || command == "Register" ) {
+            plugins.handle(request.body, response)
+          } else {
+            let resMessage = "Sorry, it looks like this number is not registered yet! In order to use <insert tech service cool jazzy name here> you must register your phone number. Respond with a messaage formatted like--> \'register FirstName LastName youruarkdomainemail@email.uark.edu\' -- For more help respond with \'register help\'"
+            const twiml = new MessagingResponse();
+            twiml.message(resMessage);
+            response.set('Content-Type', 'text/xml')
+            return response.send(twiml.toString()) 
+          }
+        } else {
+          // There are results from the DB check on phone number
+          plugins.handle(request.body, response);
+        }
 
 
         // Once  verifyed that the person exists within the DB of registered users, let the plugins handle the jazz
-        plugins.handle(request.body, response);
+        //plugins.handle(request.body, response);
       })
       .catch(err => {
         console.log("Error from registeredUsers query");

@@ -15,24 +15,29 @@
 
 */
 
+const RegisteredUsers = require('../models/registeredTextUser')
 const MessagingResponse = require('twilio').twiml.MessagingResponse
 
 const methods = {
     run: function(request, response) {
         // Strip the trigger word from the response.
         const message = request.Body.split(' ').slice(1).join(' ')
+        console.log("############ New 'Register' REQUEST ############");
         console.log(request);
 
         // If the command is  `register help` then 
-        if (request.Body == "Register help") {
+        if (request.Body.toLowerCase() == "register help") {
             const twiml = new MessagingResponse();
-            let message = "To Register a name and email to this phone number, respond with a text message formatted: \n \'register FirstName LastName youruarkemail@email.uark.edu\'"
+            let message = "To Register a name and email to this phone number, respond with a text message formatted: \n \'register FirstName LastName ADusername@email.uark.edu\'"
 
             twiml.message(message);
             response.set('Content-Type', 'text/xml')
             response.send(twiml.toString())
+  
         } else {
             // The command is not 'register help' or 'Register Help'
+            // register usermod <emailRegisteredWith>
+
 
             // Verify that the passed command has a 
             // firstName
@@ -43,6 +48,15 @@ const methods = {
 
             let recievedCommand = request.Body.split(' ').splice(1)
             console.log(recievedCommand)
+            if(recievedCommand.length == 0) {
+                console.log("Only 'register' in requested text message. Returinging");
+                const twiml = new MessagingResponse();
+                let message = "Command invalid. Only 'register' recieved, send 'register help' to see how to register your number. No Actions Preformed!"
+
+                twiml.message(message);
+                response.set('Content-Type', 'text/xml')
+                response.send(twiml.toString())
+            }
 
             let firstName = recievedCommand[0]
             let lastName = recievedCommand[1]
@@ -50,11 +64,61 @@ const methods = {
             // need to make sure that the email is formatted as @email.uark.edu
             let uarkEmail = recievedCommand[2]
 
-            
+            // TODO ADD AN ADMIN REUQEST PATH THAT IS QUIET
+
+            let resMessage = "Recieved data for new register person ---> FirstName: " + firstName + " , LastName: " + lastName + " , uarkEmail: " + uarkEmail
 
 
+            // Make sure the names are valid
+            if(firstName && lastName) {
+                // the first and last name are valid
+                console.log("Valid first and last names... checking email valididty");
 
-            const twiml = new MessagingResponse()
+                // check validity of the email address
+                if(uarkEmail.includes("@email.uark.edu")) {
+                    // valid email address
+                    console.log("Register email is correct, contains '@email.uark.edu'!");
+                    console.log("Saving with phoneNumber: ");
+                    console.log(request.From);
+                    
+                    // All info exists, save this user to the db!
+                    let newRegisteredUser = new RegisteredUsers({
+                        firstName: firstName,
+                        lastName: lastName,
+                        phoneNumber: request.From,
+                        uarkEmail: uarkEmail,
+                        trainedOn: ""
+                    })
+                    newRegisteredUser.save()
+                        .then(res => {
+                            console.log("response from saving new registered user: ");
+                            console.log(res);
+                            let resMessage = "Your number has been successfully Registered. Thank you: " + lastName + ', ' + firstName;
+                            const twiml = new MessagingResponse()
+                            twiml.message(resMessage);
+                            return response.send(twiml.toString());
+                        })
+                        .catch(err => {
+                            console.log("Error on saving new registeredUser!");
+                            console.log(err);
+                            let resMessage = "There is an error on registered. You are trying to re-register. Please contact Admin for help!" ;
+                            const twiml = new MessagingResponse()
+                            twiml.message(resMessage);
+                            return response.send(twiml.toString());
+                        })
+
+                } else {
+                    // the email address is invalid. Send text back?
+                }
+            } else {
+                // If either the first or last name is invalid?
+
+            }
+
+
+            // const twiml = new MessagingResponse()
+            // twiml.message(resMessage);
+            // return response.send(twiml.toString());
 
             // Add the message to it, and send it back to Twilio.
             // twiml.message(message)
