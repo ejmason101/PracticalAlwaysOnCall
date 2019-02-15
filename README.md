@@ -1,5 +1,5 @@
 # Mirror for git.uark.edu
-
+testing mirror push
 # AlwaysOnCall
 
 This is a texting bot app that uses the Twilio API to send out a text message, when someone presses a button asking for help, to all qualified people. First person to respond will be the person that is on campus and is closest to helping.
@@ -33,4 +33,8 @@ Incentives could be like half an hour minimum to be logged to your hour log
 
 ## References
 
+<<<<<<< HEAD
 https://www.twilio.com/blog/2018/03/sms-bot-node-texteverything.html
+=======
+https://www.twilio.com/blog/2016/08/writing-a-bot-for-ip-messaging-in-node-js.html
+>>>>>>> 97ba487090e49201f83b6f582bd121deeb3cebd5
