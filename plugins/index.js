@@ -27,7 +27,10 @@ fs.readdir(normalPath, (err, files) => {
   });
 });
 
+
+// Initiall calls are made with plugins.handle()
 const methods = {
+
   handle: function(request, response) {
     const command = request.Body.split(' ')[0].toLowerCase();
     if (aliases.hasOwnProperty(command)) {
@@ -45,6 +48,7 @@ const methods = {
       response.send(twiml.toString());
     }
   }
+
 };
 
 module.exports = methods;
