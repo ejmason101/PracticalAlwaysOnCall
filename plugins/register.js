@@ -34,7 +34,11 @@ const methods = {
             response.set('Content-Type', 'text/xml')
             response.send(twiml.toString())
   
-        } else {
+        } else if (request.Body.toLowerCase() == 'stop') {
+            console.log("user send 'stop'. removing them from the db!");
+
+                // TODO findOneAndDelete!!!
+        }else {
             // The command is not 'register help' or 'Register Help'
             // register usermod <emailRegisteredWith>
 
@@ -49,9 +53,9 @@ const methods = {
             let recievedCommand = request.Body.split(' ').splice(1)
             console.log(recievedCommand)
             if(recievedCommand.length == 0) {
-                console.log("Only 'register' in requested text message. Returinging");
+                console.log("Only Command Word in requested text message. Returning");
                 const twiml = new MessagingResponse();
-                let message = "Command invalid. Only 'register' recieved, send 'register help' to see how to register your number. No Actions Preformed!"
+                let message = "Command invalid. Text 'insert passed command word here'" + " No Actions Preformed!"
 
                 twiml.message(message);
                 response.set('Content-Type', 'text/xml')
@@ -140,7 +144,7 @@ const methods = {
     },
   
     meta: {
-      aliases: ['register']
+      aliases: ['register', 'stop', 'Stop']
     }
   };
   

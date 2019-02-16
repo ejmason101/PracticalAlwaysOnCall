@@ -67,7 +67,7 @@ app.post(config.twilio.webhook_path, function(request, response) {
     // Add middleware to check if the request is valid
     console.log("\n~~~ app.js recieved text from phone number ~~~");
     console.log(request.body.From+ "\n");
-    console.log(request);
+    //console.log(request);
     let command = request.body.Body.split(' ')[0];
 
     // Search for the matching number
@@ -79,7 +79,7 @@ app.post(config.twilio.webhook_path, function(request, response) {
           if(command == "register" || command == "Register" ) {
             plugins.handle(request.body, response)
           } else {
-            let resMessage = "Sorry, it looks like this number is not registered yet! In order to use <insert tech service cool jazzy name here> you must register your phone number. Respond with a messaage formatted like--> \'register FirstName LastName youruarkdomainemail@email.uark.edu\' -- For more help respond with \'register help\'"
+            let resMessage = "Sorry, it looks like this number is not registered yet! In order to use <insert tech service cool jazzy name here> you must register your phone number.\n\n Respond with a messaage formatted like--> \'register FirstName LastName ADusername@email.uark.edu\' -- Your email MUST contain @email.uark.edu! For more help respond with \'register help\'"
             const twiml = new MessagingResponse();
             twiml.message(resMessage);
             response.set('Content-Type', 'text/xml')
